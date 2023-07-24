@@ -1,0 +1,29 @@
+{
+  "intents": [
+    {
+      "name": "greeting",
+      "patterns": ["hello", "hi", "hey"],
+      "responses": ["Hello!", "Hi!", "Hey there!"]
+    },
+    {
+      "name": "goodbye",
+      "patterns": ["bye", "goodbye", "see you"],
+      "responses": ["Goodbye!", "See you later!", "Take care!"]
+    },
+    {
+      "name": "question",
+      "patterns": ["how are you", "what's up", "how's it going"],
+      "responses": ["I'm doing well, thank you!", "Not too bad!", "I'm just a chatbot, but I'm here to help!"]
+    },
+    {
+      "name": "read_file",
+      "patterns": ["read data", "load data"],
+      "responses": ["Sure, I'll read the data file."]
+    },
+    {
+      "name": "unknown",
+      "patterns": ["*"],
+      "responses": ["I'm sorry, but I don't understand.", "Can you please rephrase that?", "I'm not sure how to respond to that."]
+    }
+  ]
+}
