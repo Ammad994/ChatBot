@@ -1,53 +1,62 @@
 # -*- coding: utf-8 -*-
-import random
 import json
-import os
+import re
 
-class MyChatbot:
+class SimpleChatbot:
     def __init__(self):
-        self.load_data()
+        self.load_intents_from_file("data.json")
 
-    def load_data(self):
-        # Get the full path to the data.json file
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        data_path = os.path.join(script_dir, 'data.json')
+    def load_intents_from_file(self, file_path):
+        with open(file_path, "r") as file:
+            self.intents = json.load(file)
 
-        # Load chatbot data from data.json file
-        with open(data_path) as file:
-            data = json.load(file)
-            self.intents = data['intents']
+    def handle_message(self, message):
+        intent = self.get_intent(message)
+        if intent == "greeting":
+            return self.get_random_response(self.intents["greeting"])
+        elif intent == "farewell":
+            return self.get_random_response(self.intents["farewell"])
+        elif intent == "question":
+            return self.get_random_response(self.intents["question"])
+        elif intent == "calculate":
+            return self.calculate_result(message)
+        else:
+            return "I'm sorry, I don't understand that."
 
-    def get_response(self, user_input):
-        user_input = user_input.lower()
+    def get_intent(self, message):
+        for intent, patterns in self.intents["intents"].items():
+            for pattern in patterns:
+                if re.search(pattern, message):
+                    return intent
+        return None
 
-        for intent in self.intents:
-            for pattern in intent['patterns']:
-                if self.match_pattern(user_input, pattern):
-                    if intent['name'] == 'read_file':
-                        self.load_data()
-                        return "Data file loaded successfully!"
-                    else:
-                        return random.choice(intent['responses'])
+    def get_random_response(self, responses):
+        import random
+        return random.choice(responses)
 
-        # If no match found, use the unknown intent responses
-        unknown_intent = next((intent for intent in self.intents if intent['name'] == 'unknown'), None)
-        return random.choice(unknown_intent['responses'])
-
-    def match_pattern(self, user_input, pattern):
-        # Check if the user input matches the pattern
-        return user_input.startswith(pattern) or user_input.endswith(pattern)
+    def calculate_result(self, message):
+        for pattern in self.intents["intents"]["calculate"]:
+            match = re.search(pattern, message)
+            if match:
+                expression = match.group(1)
+                try:
+                    result = eval(expression)
+                    return f"The result of {expression} is {result}."
+                except Exception as e:
+                    return f"Error: {str(e)}"
+        return "I'm sorry, I couldn't understand the calculation."
 
 def main():
-    chatbot = MyChatbot()
-    print("Chatbot: Hello! How can I assist you?")
+    chatbot = SimpleChatbot()
 
+    print("Chatbot: Hello! I'm a simple chatbot. How can I help you today?")
     while True:
         user_input = input("You: ")
-        if chatbot.match_pattern(user_input, 'bye'):
+        if user_input.lower() == "exit":
             print("Chatbot: Goodbye! Have a great day!")
             break
 
-        response = chatbot.get_response(user_input)
+        response = chatbot.handle_message(user_input)
         print("Chatbot:", response)
 
 if __name__ == "__main__":
