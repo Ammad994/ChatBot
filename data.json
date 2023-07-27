@@ -1,29 +1,21 @@
 {
-  "intents": [
-    {
-      "name": "greeting",
-      "patterns": ["hello", "hi", "hey"],
-      "responses": ["Hello!", "Hi!", "Hey there!"]
-    },
-    {
-      "name": "goodbye",
-      "patterns": ["bye", "goodbye", "see you"],
-      "responses": ["Goodbye!", "See you later!", "Take care!"]
-    },
-    {
-      "name": "question",
-      "patterns": ["how are you", "what's up", "how's it going"],
-      "responses": ["I'm doing well, thank you!", "Not too bad!", "I'm just a chatbot, but I'm here to help!"]
-    },
-    {
-      "name": "read_file",
-      "patterns": ["read data", "load data"],
-      "responses": ["Sure, I'll read the data file."]
-    },
-    {
-      "name": "unknown",
-      "patterns": ["*"],
-      "responses": ["I'm sorry, but I don't understand.", "Can you please rephrase that?", "I'm not sure how to respond to that."]
-    }
-  ]
+  "intents": {
+    "greeting": ["hello", "hi", "hey"],
+    "farewell": ["bye", "goodbye", "see you"],
+    "question": ["how are you?", "what's up?", "how's your day?"],
+    "calculate": [
+      "\\b(\\d+\\s*[-+*/%^]\\s*\\d+)\\b",
+      "\\bsqrt\\((\\d+)\\)\\b",
+      "\\bsin\\((\\d+)\\)\\b",
+      "\\bcos\\((\\d+)\\)\\b",
+      "\\btan\\((\\d+)\\)\\b",
+      "\\blog\\((\\d+)\\)\\b",
+      "\\((\\d+\\s*[-+*/]\\s*\\d+)\\)\\s*[*]\\s*(\\d+)\\b",
+      "\\((\\d+\\s*[-+*/]\\s*\\d+)\\)\\s*[/]\\s*(\\d+)\\b"
+    ]
+  },
+  "greeting": ["Hello!", "Hi!", "Hey!", "Nice to see you!"],
+  "farewell": ["Goodbye!", "See you later!", "Take care!"],
+  "question": ["I'm doing well, thank you!", "Not bad, thanks!", "Pretty good!"],
+  "calculate": ["Sure, let me do the math!", "I'm great at calculations!"]
 }

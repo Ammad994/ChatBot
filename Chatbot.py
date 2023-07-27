@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import re
+import tkinter as tk
+from tkinter import scrolledtext
 
 class SimpleChatbot:
     def __init__(self):
@@ -46,18 +48,40 @@ class SimpleChatbot:
                     return f"Error: {str(e)}"
         return "I'm sorry, I couldn't understand the calculation."
 
+class SimpleChatbotGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Simple Chatbot GUI")
+
+        self.chatbot = SimpleChatbot()
+
+        self.chat_log = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=10)
+        self.chat_log.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+
+        self.user_input = tk.Entry(root, width=30)
+        self.user_input.grid(row=1, column=0, padx=10, pady=10)
+
+        self.send_button = tk.Button(root, text="Send", command=self.send_message)
+        self.send_button.grid(row=1, column=1, padx=10, pady=10)
+
+        # Display initial greeting
+        self.chat_log.insert(tk.END, "Chatbot: Hello! I'm a simple chatbot. How can I help you today?\n")
+
+    def send_message(self):
+        user_message = self.user_input.get()
+        self.chat_log.insert(tk.END, "You: " + user_message + "\n")
+        if user_message.lower() == "exit":
+            response = "Chatbot: Goodbye! Have a great day!"
+            self.chat_log.insert(tk.END, response + "\n")
+            self.root.after(2000, self.root.destroy)
+        else:
+            response = self.chatbot.handle_message(user_message)
+            self.chat_log.insert(tk.END, "Chatbot: " + response + "\n")
+
 def main():
-    chatbot = SimpleChatbot()
-
-    print("Chatbot: Hello! I'm a simple chatbot. How can I help you today?")
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() == "exit":
-            print("Chatbot: Goodbye! Have a great day!")
-            break
-
-        response = chatbot.handle_message(user_input)
-        print("Chatbot:", response)
+    root = tk.Tk()
+    chatbot_gui = SimpleChatbotGUI(root)
+    root.mainloop()
 
 if __name__ == "__main__":
     main()
